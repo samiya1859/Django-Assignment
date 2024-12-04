@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+    <div class="welcome-message">
+        <header class="bg-green-600 text-white text-center py-8 shadow-md h-[85vh] flex flex-col justify-center">
+            <h1 class="text-4xl font-bold">Welcome back, {{ user.username }}! to the Inventory Property Management System</h1>
+            <p class="text-lg mt-2">We are glad to have you here. Manage your properties effortlessly.</p>
+        </header>
+    
+        <!-- Additional logged-in features here -->
+    </div>
+{% else %}
+    <div class="welcome-message">
+        <header class="bg-green-600 text-white text-center py-8 shadow-md h-[85vh] flex flex-col justify-center">
+            <h1 class="text-4xl font-bold">Welcome to the Inventory Property Management System</h1>
+            <p class="text-lg mt-2">We are glad to have you here. Manage your properties effortlessly.</p>
+            <p>Please log in or register to manage your properties.</p>
+        </header>
+    </div>
+{% endif %}
+
+{% endblock %}

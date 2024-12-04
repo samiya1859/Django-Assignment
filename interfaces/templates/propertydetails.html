@@ -1,0 +1,77 @@
+{% block content %}
+<div class="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold mb-4">{{ object.title }}</h1>
+
+    <!-- Language Switcher -->
+    <div class="mb-4">
+        <label for="languageSwitcher" class="font-semibold">Select Language:</label>
+        <select id="languageSwitcher" class="ml-2 p-2 border rounded">
+            {% for lang in available_languages %}
+            <option value="?lang={{ lang }}" {% if lang == selected_language %}selected{% endif %}>
+                {{ lang|upper }}
+            </option>
+            {% endfor %}
+        </select>
+    </div> <br><br>
+
+    <!-- Property Images -->
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <img src="{{ object.main_image.url }}" alt="Image" class="w-full h-64 object-cover rounded-lg">
+        </div>
+    </div>
+
+    <!-- Property Details -->
+    <div class="text-lg mb-4">
+        <p><strong>Location:</strong> {{ object.location }}</p>
+        <p><strong>Country:</strong> {{ object.country_code }}</p>
+        <p><strong>Center Coordinates:</strong> {{ object.center }}</p>
+        <p><strong>Bedrooms:</strong> {{ object.bedroom_count }}</p>
+        <p><strong>Review Score:</strong> {{ object.review_score }}</p>
+        <p><strong>Price:</strong> ${{ object.usd_rate }}</p>
+    </div>
+
+    <!-- Localized Content -->
+    {% if localized_content %}
+    <h2 class="text-xl font-semibold mt-6 mb-2">Localized Details ({{ localized_content.language|upper }})</h2>
+    <p><strong>Description:</strong> {{ localized_content.description }}</p>
+    <h3 class="text-lg font-semibold mt-4">Policies:</h3>
+    <ul class="list-disc pl-6">
+        {% for key, value in localized_content.policy.items %}
+        <li><strong>{{ key|capfirst }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-red-500">Localized content not available for this language.</p>
+    {% endif %}
+
+    <!-- Property Amenities -->
+    <h2 class="text-xl font-semibold mt-6 mb-2">Amenities:</h2>
+    <ul class="list-disc pl-6">
+        {% for amenity in object.amenities.all %}
+        <li>{{ amenity.amenity }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Edit and Delete Buttons -->
+    {% if user.profile.user_type == 'owner' %}
+    <a href="{% url 'edit_property' object.id %}" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+        Edit Your Property Data
+    </a>
+    <button id="deleteBtn" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 ml-4">
+        Delete Property
+    </button>
+    {% endif %}
+</div>
+
+<!-- Modal for Confirmation -->
+<!-- (Existing delete modal code remains the same) -->
+
+<!-- JavaScript for Language Switcher -->
+<script>
+    const languageSwitcher = document.getElementById('languageSwitcher');
+    languageSwitcher.addEventListener('change', function() {
+        window.location.href = this.value;  // Redirect to the selected language's URL
+    });
+</script>
+{% endblock %}

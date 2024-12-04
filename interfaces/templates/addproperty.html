@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-8 bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold mb-6">
+        {% if property %}
+            Edit Property: {{ property.title }}
+        {% else %}
+            Add Property
+        {% endif %}
+    </h1>
+
+    <!-- Feedback Messages -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="p-4 rounded {{ message.tags }} {{ 'bg-green-100 text-green-800' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if form.errors %}
+    <div class="bg-red-100 text-red-800 p-4 rounded">
+        <ul>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Property Form -->
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input type="hidden" name="center" id="center" value="{{ property.center|default:'' }}">
+
+        <!-- Map Container -->
+        <div id="map" style="height: 400px;"></div>
+
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">
+            {% if property %}
+                Update Property
+            {% else %}
+                Add Property
+            {% endif %}
+        </button>
+    </form>
+</div>
+
+<!-- Include Leaflet.js -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    var defaultLat = 23.6850; // Example latitude for Bangladesh
+    var defaultLon = 90.3563; // Example longitude for Bangladesh
+
+    var map = L.map('map').setView([defaultLat, defaultLon], 7); // Adjust zoom level as needed
+
+    // Add a marker at the default location
+    var marker = L.marker([defaultLat, defaultLon]).addTo(map);
+    document.getElementById('center').value = defaultLon + ',' + defaultLat;
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // Pre-fill the map with the existing center (if available from the property instance)
+    {% if property and property.center %}
+        var coords = "{{ property.center }}".split(',');
+        var lat = parseFloat(coords[1]);
+        var lon = parseFloat(coords[0]);
+        map.setView([lat, lon], 13);
+        marker.setLatLng([lat, lon]);
+    {% endif %}
+
+    map.on('click', function (e) {
+        var lat = e.latlng.lat;
+        var lon = e.latlng.lng;
+
+        // Update the marker or create a new one
+        if (marker) {
+            marker.setLatLng([lat, lon]);
+        } else {
+            marker = L.marker([lat, lon]).addTo(map);
+        }
+
+        // Update the hidden input value
+        document.getElementById('center').value = lon + ',' + lat;
+    });
+
+    document.querySelector('form').addEventListener('submit', function (event) {
+        var centerValue = document.getElementById('center').value;
+        if (!centerValue) {
+            alert('Please select a location on the map before submitting the form.');
+            event.preventDefault(); // Stop form submission
+        }
+    });
+</script>
+{% endblock %}

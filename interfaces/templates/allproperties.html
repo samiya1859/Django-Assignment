@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="text-2xl font-semibold mb-6">All Properties</h2>
+
+    <!-- If the user is an owner, show an option to add a new property -->
+    {% if user.profile.user_type == 'owner' %}
+        <a href="{% url 'add_property' %}" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            Add Your Property
+        </a>
+    {% endif %}
+
+    <!-- Property List -->
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for property in properties %}
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <img src="{{ property.main_image.url }}" alt="{{ property.title }}" class="w-full h-48 object-cover rounded-md">
+                <h3 class="text-xl font-semibold mt-4">{{ property.title }}</h3>
+                <p class="text-gray-600">Location: {{ property.location }}</p>
+                <p class="text-gray-600">Price: ${{ property.usd_rate }}</p>
+                <p class="text-gray-600">Bedrooms: {{ property.bedroom_count }}</p>
+                <a href="{% url 'property_detail' property.id %}" class="text-blue-500 hover:text-blue-700">View Details</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

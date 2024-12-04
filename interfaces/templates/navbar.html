@@ -1,0 +1,31 @@
+<nav class="bg-gray-100 p-4">
+  <ul class="list-none flex justify-around items-center m-0">
+    <li>
+      <a href="#" class="text-lg font-semibold text-gray-800 hover:text-gray-600">
+        Inventory Management
+      </a>
+    </li>
+    <!-- If user is authenticated (logged in) -->
+    {% if user.is_authenticated %}
+      <li>
+        <a href="{% url 'home' %}" class="px-4 py-2 text-gray-800 hover:text-gray-600">Home</a>
+      </li>
+      <li>
+        <a href="{% url 'properties' %}" class="px-4 py-2 text-gray-800 hover:text-gray-600">All Properties</a>
+      </li>
+      <li>
+        <a href="{% url 'profile' %}" class="px-4 py-2 text-gray-800 hover:text-gray-600">Profile</a>
+      </li>
+      <li>
+        <a href="{% url 'logout' %}" class="px-4 py-2 text-gray-800 hover:text-gray-600">Logout</a>
+      </li>
+    {% else %}
+      <li>
+        <a href="{% url 'login' %}" class="px-4 py-2 text-gray-800 hover:text-gray-600">Login</a>
+      </li>
+      <li>
+        <a href="{% url 'register' %}" class="px-4 py-2 text-gray-800 hover:text-gray-600">Register</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
