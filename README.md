@@ -16,7 +16,14 @@ This is a Property Management System built using Django, PostgreSQL, and the Pos
 - **`users`**: Manages user authentication, including registration and login functionality.
 - **`interfaces`**: Handles the front-end templates and static files for the user interface.
 
+## Functionalities
+- **`User`** : User can register on basis of user types like owner and buyer. and ine can override all functionalities through creating superuser. one user cannot do login until superuser makes that user active from admin pannel. 
+  ```bash
+  docker-compose exec web python manage.py createsuperuser
+  ```
+-**`Properties`**: Properties app has several models to handle accomodation, location and localized accomodation. Localized accomodation is used for generating information in different languages
 
+-**`Interfaces`**: Interfaces app is used for handling all templates and images. 
 
 ## Requirements
 
