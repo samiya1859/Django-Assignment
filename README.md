@@ -10,6 +10,14 @@ This is a Property Management System built using Django, PostgreSQL, and the Pos
 - **GIS Integration**: PostgreSQL with PostGIS extension is used for location management.
 - **Admin Panel**: Admin users can manage users and property listings.
 
+- The project consists of three main apps:
+
+- **`properties`**: Handles property-related models, views, and logic.
+- **`users`**: Manages user authentication, including registration and login functionality.
+- **`interfaces`**: Handles the front-end templates and static files for the user interface.
+
+
+
 ## Requirements
 
 - Python 3.12+
@@ -27,6 +35,47 @@ Follow these steps to set up the project locally.
 ```bash
 git clone https://github.com/samiya1859/Django-Assignment.git
 cd Django-Assignment
+```
+## 2. Create virtual envrionment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows, use .venv\Scripts\activate
+```
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+## 4. Set up environment variables
+```ini
+POSTGRES_DB=your_database_name
+POSTGRES_USER=your_database_user
+POSTGRES_PASSWORD=your_database_password
+POSTGRES_HOST=localhost  # or your Docker container host if using Docker
+POSTGRES_PORT=5432
+```
+## 5. Set up your docker
+```bash
+docker compose build up -d
+```
+## 6. Apply migrations
+Run the migrations to set up the database:
+```bash
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+```
+## 7. Run the development server 
+```bash
+docker-compose exec web python manage.py runserver
+```
+You can now access the application at http://127.0.0.1:8000/.
+## 8. Tests
+To run the tests with coverage:
+```bash
+docker-compose exec web coverage run --source='.' manage.py test
+docker-compose exec web coverage report
+docker-compose exec web coverage html
 ```
 
 
