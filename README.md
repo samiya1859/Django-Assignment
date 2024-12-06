@@ -37,7 +37,7 @@ This is a Property Management System built using Django, PostgreSQL, and the Pos
 
 Follow these steps to set up the project locally.
 
-### 1. Clone the repository
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/samiya1859/Django-Assignment.git
